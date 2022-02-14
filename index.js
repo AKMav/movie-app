@@ -1,7 +1,10 @@
 const main = document.querySelector('main');
 const upcomingBtn = document.querySelector('.btn-2');
 const popularBtn = document.querySelector('.btn-1');
+const form = document.querySelector('.header__form');
+const searchInput = document.querySelector('#search');
 window.onload = makeMainPage();
+searchInput.focus();
 
 async function makeMainPage() {
 	const res = await fetch('https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=873925b7d3cfa7bab5d72ff9e7b059c3');
@@ -90,5 +93,32 @@ async function getPopular() {
 }
 
 
+
+async function searchMovies() {
+	if (searchInput.value) {
+		if (event.keyCode === 13) {
+			const res = await fetch(`https://api.themoviedb.org/3/search/movie?query=${searchInput.value}&api_key=873925b7d3cfa7bab5d72ff9e7b059c3`);
+			const data = await res.json();
+
+			let image = document.querySelectorAll('.films__image');
+			let filmTitle = document.querySelectorAll('.film__title');
+			let filmRate = document.querySelectorAll('.film__rate');
+			let review = document.querySelectorAll('.film__review');
+
+			for (let i = 0; i < data.results.length; i++) {
+				image[i].src = 'https://image.tmdb.org/t/p/w500' + data.results[i].poster_path;
+				image[i].alt = `Постер к фильму `;
+				image[i].width = 300;
+				image[i].height = 450;
+				image[i].classList.add('films__image');
+				filmTitle[i].innerText = data.results[i].title;
+				filmRate[i].innerText = data.results[i].vote_average;
+				review[i].innerText = data.results[i].overview;
+			}
+		}
+	}
+}
+
+searchInput.addEventListener('keyup', searchMovies);
 upcomingBtn.addEventListener('click', getUpcoming);
 popularBtn.addEventListener('click', getPopular);
