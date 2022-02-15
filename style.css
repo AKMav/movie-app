@@ -78,10 +78,11 @@
 	
 }
 
-.header__search:focus {
+.header__search:focus-visible {
 	padding: 10px;
 	background-color: #EEEEEE;
 	border: none;
+	outline: none;
 }
 
 .header__search::placeholder {
